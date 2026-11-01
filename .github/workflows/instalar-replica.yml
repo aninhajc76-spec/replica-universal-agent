@@ -1,0 +1,51 @@
+name: Publicar arquivos do Replica Universal
+
+on:
+  push:
+    paths:
+      - .github/workflows/instalar-replica.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descompactar os 52 arquivos na raiz
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import stat
+          import zipfile
+
+          zip_path = pathlib.Path('Replica_Universal_GitHub_PRONTO.zip')
+          if not zip_path.is_file():
+              print('ZIP já foi importado.')
+              raise SystemExit(0)
+          with zipfile.ZipFile(zip_path) as archive:
+              files = [item for item in archive.infolist() if not item.is_dir()]
+              assert len(files) == 52, f'Esperados 52 arquivos, encontrados {len(files)}'
+              assert archive.testzip() is None, 'ZIP corrompido'
+              for item in files:
+                  parts = pathlib.PurePosixPath(item.filename).parts
+                  assert len(parts) > 1 and parts[0] == 'replica-universal-agent'
+                  assert '..' not in parts and not stat.S_ISLNK(item.external_attr >> 16)
+                  target = pathlib.Path(*parts[1:])
+                  assert not target.exists(), f'O arquivo já existe: {target}'
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(archive.read(item))
+          PY
+      - name: Publicar no GitHub e excluir o ZIP antigo
+        shell: bash
+        run: |
+          test -f replica.py || exit 1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -f Replica_Universal_GitHub_PRONTO.zip
+          git add -A
+          git commit -m 'Organizar arquivos do Agente Replica Universal'
+          git push
