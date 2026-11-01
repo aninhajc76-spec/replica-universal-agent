@@ -46,6 +46,6 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm -f Replica_Universal_GitHub_PRONTO.zip
-          git add -A
+          git add -A -- . ':(exclude).github/workflows/tests.yml'
           git commit -m 'Organizar arquivos do Agente Replica Universal'
           git push
