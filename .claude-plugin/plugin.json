@@ -1,0 +1,10 @@
+{
+  "name": "replica-universal-agent",
+  "description": "Eleven portable Replica skills to design and build original applications across assistants.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Community adaptation (original method: Jake Schincariol)"
+  },
+  "license": "MIT",
+  "skills": "./skills"
+}

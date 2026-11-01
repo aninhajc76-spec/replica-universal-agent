@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "replica-universal-agent",
+  "version": "1.0.0",
+  "description": "Portabilidade dos 11 módulos Replica para múltiplos agentes de IA. Criação de aplicações originais.",
+  "author": {
+    "name": "Community adaptation; origin Jake Schincariol"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Replica Universal",
+        "shortDescription": "Engenharia de apps por etapas",
+        "longDescription": "Método Replica para análise pública de funcionalidades e criação de aplicativos originais em 11 etapas.",
+        "capabilities": [],
+        "defaultPrompt": "Use o Replica Universal para planejar uma aplicação original. Comece por /replica-recon."
+      }
+    }
+  }
+}
